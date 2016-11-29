@@ -65,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(mToolbar)
                 .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("Home").withIdentifier(NavigationHandler.idHome)
+                        new PrimaryDrawerItem().withName("Home").withIdentifier(NavigationHandler.idHome),
+                        new PrimaryDrawerItem().withName("Punishments List").withIdentifier(NavigationHandler.idPunishmentsList)
                 )
                 .addStickyDrawerItems(
                         new SecondaryDrawerItem().withName("Settings").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(NavigationHandler.idSettings)

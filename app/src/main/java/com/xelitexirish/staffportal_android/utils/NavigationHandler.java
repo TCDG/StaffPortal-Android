@@ -20,6 +20,7 @@ public class NavigationHandler {
     private static final String TAG = NavigationHandler.class.getSimpleName();
 
     public static final int idHome = 1;
+    public static final int idPunishmentsList = 2;
     public static final int idSettings = 20;
 
     public static void handleClick(Context context, IDrawerItem drawerItem) {
@@ -28,6 +29,9 @@ public class NavigationHandler {
         if (id == idHome) {
             FragmentHome homeFragment = new FragmentHome();
             switchScreen(context, homeFragment);
+
+        } else if (id == idPunishmentsList) {
+
 
         } else if (id == idSettings) {
 
