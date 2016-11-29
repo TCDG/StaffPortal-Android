@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 public class ApiHandler {
 
-    private static final String TEMP_BASE_URL = "https://portal.scammersublounge.com";
+    private static final String TEMP_BASE_URL = "http://portal.scammersublounge.com";
 
     public static void setupLists(Context context){
         new UpdateReadData(context).execute();
@@ -36,12 +36,12 @@ public class ApiHandler {
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            super.onPreExecute();/*
             this.mProgressDialog = new ProgressDialog(mContext);
             this.mProgressDialog.setTitle("Please wait...");
             this.mProgressDialog.setMessage("We are downloading all stop data so you don't have to do it again.");
             this.mProgressDialog.setCancelable(false);
-            this.mProgressDialog.show();
+            this.mProgressDialog.show();*/
         }
 
         @Override
