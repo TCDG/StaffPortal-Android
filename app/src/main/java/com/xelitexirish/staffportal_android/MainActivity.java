@@ -3,12 +3,18 @@ package com.xelitexirish.staffportal_android;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.xelitexirish.staffportal_android.ui.FragmentHome;
+import com.xelitexirish.staffportal_android.utils.NavigationHandler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,6 +64,19 @@ public class MainActivity extends AppCompatActivity {
                 .withAccountHeader(mNavDrawerHeader)
                 .withToolbar(mToolbar)
                 .withActionBarDrawerToggleAnimated(true)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("Home").withIdentifier(NavigationHandler.idHome)
+                )
+                .addStickyDrawerItems(
+                        new SecondaryDrawerItem().withName("Settings").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(NavigationHandler.idSettings)
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        NavigationHandler.handleClick(MainActivity.this, drawerItem);
+                        return false;
+                    }
+                })
                 .withSavedInstance(savedInstanceState)
                 .build();
     }
