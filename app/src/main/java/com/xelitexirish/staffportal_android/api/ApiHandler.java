@@ -52,10 +52,12 @@ public class ApiHandler {
                 JSONParser jsonParser = new JSONParser();
                 JSONArray jsonArray = jsonParser.makeHttpRequest(mContext, readUrl, "GET", new HashMap<String, String>());
 
-                for (int x = 0; x < jsonArray.length(); x++){
-                    JSONObject jsonItem = jsonArray.getJSONObject(x);
-                    System.out.println(jsonItem.getString("offender"));
+                if (jsonArray != null) {
+                    for (int x = 0; x < jsonArray.length(); x++) {
+                        JSONObject jsonItem = jsonArray.getJSONObject(x);
+                        System.out.println(jsonItem.getString("offender"));
 
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
