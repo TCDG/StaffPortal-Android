@@ -3,6 +3,7 @@ package com.xelitexirish.staffportal_android.utils;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,11 +30,11 @@ public class JSONParser {
     DataOutputStream outputStream;
     StringBuilder result;
     URL urlObj;
-    JSONObject jsonObject = null;
+    JSONArray jsonObject = null;
     StringBuilder stringBuilder;
     String paramsString;
 
-    public JSONObject makeHttpRequest(Context context, String url, String method, HashMap<String, String> params) {
+    public JSONArray makeHttpRequest(Context context, String url, String method, HashMap<String, String> params) {
         if (NetworkUtils.hasNetworkConnection(context)) {
             stringBuilder = new StringBuilder();
             int i = 0;
@@ -117,9 +118,10 @@ public class JSONParser {
 
             // try parse the string to a JSON object
             try {
-                jsonObject = new JSONObject(result.toString());
+                jsonObject = new JSONArray(result.toString());
             } catch (JSONException e) {
                 Log.e("JSON Parser", "Error parsing data " + e.toString());
+                e.printStackTrace();
             }
 
             // return JSON Object
@@ -127,6 +129,6 @@ public class JSONParser {
         }else {
             NetworkUtils.showNoInternetMsg(context);
         }
-        return new JSONObject();
+        return new JSONArray();
     }
 }

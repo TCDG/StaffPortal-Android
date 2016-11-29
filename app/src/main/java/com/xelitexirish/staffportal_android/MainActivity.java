@@ -13,6 +13,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.xelitexirish.staffportal_android.api.ApiHandler;
 import com.xelitexirish.staffportal_android.ui.FragmentHome;
 import com.xelitexirish.staffportal_android.utils.NavigationHandler;
 
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Create the nav drawer
         buildNavDrawer(savedInstanceState);
+
+        ApiHandler.setupLists(this);
 
         // Set default home page
         if (findViewById(R.id.fragment_container) != null) {
