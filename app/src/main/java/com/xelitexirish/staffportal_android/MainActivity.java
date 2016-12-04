@@ -44,17 +44,17 @@ public class MainActivity extends AppCompatActivity {
         buildNavDrawer(savedInstanceState);
 
         ApiHandler.setupLists(this);
-
+        startActivity(new Intent(MainActivity.this, IntroActivity.class));
         mIntroManager = new IntroManager(this);
         if (mIntroManager.isFirstTimeLaunch()) {
-            startActivity(new Intent(MainActivity.this, IntroActivity.class));
+            //startActivity(new Intent(MainActivity.this, IntroActivity.class));
             finish();
         }
 
         // Set default home page
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null) {
-                return;
+                    return;
             }
 
             FragmentHome homeFragment = new FragmentHome();

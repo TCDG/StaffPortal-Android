@@ -1,0 +1,33 @@
+language: android
+
+jdk:
+  - oraclejdk8
+
+before_install:
+    - chmod +x gradlew
+
+script:
+     - ./gradlew assembleDebug
+    
+android:
+  components:
+    # Uncomment the lines below if you want to
+    # use the latest revision of Android SDK Tools
+    # - platform-tools
+    # - tools
+
+    # The BuildTools version used by your project
+    - tools
+    - build-tools-25.0.1
+
+    # The SDK version used to compile your project
+    - android-25
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - addon-google_apis-google-19
+    
+notifications:
+  webhooks: https://discordapp.com/api/webhooks/255036808998551552/7x0rlmONfyKjbfuW6dZ5bTUeNjbIsQXr5yLBUyeSk5UFGigng4kuS3yCvo18OapD_3tE

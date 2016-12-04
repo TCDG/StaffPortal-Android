@@ -1,155 +1,118 @@
 package com.xelitexirish.staffportal_android.ui;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import com.pixelcan.inkpageindicator.InkPageIndicator;
+import com.github.paolorotolo.appintro.AppIntro2;
+import com.github.paolorotolo.appintro.AppIntroFragment;
+import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
+import com.github.paolorotolo.appintro.ISlidePolicy;
 import com.xelitexirish.staffportal_android.MainActivity;
 import com.xelitexirish.staffportal_android.R;
-import com.xelitexirish.staffportal_android.utils.IntroManager;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by XeliteXirish on 03/12/2016 (www.xelitexirish.com)
  */
 
-public class IntroActivity extends AppCompatActivity {
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private IntroManager mIntroManager;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-
-    private int[] layouts = {R.layout.fragment_intro_first_page,
-            R.layout.fragment_intro_second_page,
-            R.layout.fragment_intro_third_page};
-
-    private int page = -1;
-    private Timer timer;
+public class IntroActivity extends AppIntro2 {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intro_stepper);
-        mIntroManager = new IntroManager(this);
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter();
+        addSlide(AppIntroFragment.newInstance("Punishment List", "View the reason that you were punished on your favourite discord server", R.mipmap.ic_launcher, Color.parseColor("#1976D2")));
+        addSlide(AppIntroFragment.newInstance("Submittion Tool", "A staff tool that allows you to submit punishments to the database!", R.mipmap.ic_launcher, Color.parseColor("#1976D2")));
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        addSlide(SlideDetails.newInstance(R.layout.fragment_intro_details));
 
-        InkPageIndicator indicator = (InkPageIndicator) findViewById(R.id.indicator);
-        indicator.setViewPager(mViewPager);
+        setFadeAnimation();
 
-        final Button mGetStarted = (Button) findViewById(R.id.get_started);
+        showSkipButton(false);
+        setProgressButtonEnabled(true);
 
-        mGetStarted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIntroManager.setFirstTimeLaunch(false);
-                startActivity(new Intent(IntroActivity.this, MainActivity.class));
-                finish();
+        setVibrate(true);
+        setVibrateIntensity(30);
+    }
+
+    @Override
+    public void onDonePressed(Fragment currentFragment) {
+        super.onDonePressed(currentFragment);
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
+    public static class SlideDetails extends Fragment implements ISlidePolicy, ISlideBackgroundColorHolder {
+
+        private static final String ARG_LAYOUT_RES_ID = "layoutResId";
+        private int layoutResId;
+        private EditText editTextHostname;
+
+        public static SlideDetails newInstance(int layoutResId) {
+            SlideDetails slideDetails = new SlideDetails();
+
+            Bundle args = new Bundle();
+            args.putInt(ARG_LAYOUT_RES_ID, layoutResId);
+            slideDetails.setArguments(args);
+
+            return slideDetails;
+        }
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            if (getArguments() != null && getArguments().containsKey(ARG_LAYOUT_RES_ID)) {
+                layoutResId = getArguments().getInt(ARG_LAYOUT_RES_ID);
             }
-        });
-
-        mViewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                timer.cancel();
-                return false;
-            }
-        });
-        autoScrollViewPager(3000);
-    }
-
-    private void autoScrollViewPager(int milliseconds) {
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new AutoScroll(), 0, milliseconds);
-    }
-
-    class AutoScroll extends TimerTask {
-
-        @Override
-        public void run() {
-
-            // As the TimerTask run on a seprate thread from UI thread we have
-            // to call runOnUiThread to do work on UI thread.
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    if (page >= 2) {
-                        page = 0;
-                    } else {
-                        page = page + 1;
-                    }
-                    mViewPager.setCurrentItem(page, true);
-                }
-            });
-
         }
-    }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends PagerAdapter {
-        private LayoutInflater layoutInflater;
-
-        public SectionsPagerAdapter() {
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            return inflater.inflate(layoutResId, container, false);
         }
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
 
-            View view = layoutInflater.inflate(layouts[position], container, false);
-            container.addView(view);
+            editTextHostname = (EditText) view.findViewById(R.id.editTextHostname);
 
-            return view;
         }
 
         @Override
-        public int getCount() {
-            return layouts.length;
+        public boolean isPolicyRespected() {
+            return (isUrl(editTextHostname.getText().toString()));
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object obj) {
-            return view == obj;
-        }
+        public void onUserIllegallyRequestedNextPage() {
+            Toast.makeText(getContext(), "Please enter a valid url!", Toast.LENGTH_SHORT).show();
 
+        }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            View view = (View) object;
-            container.removeView(view);
+        public int getDefaultBackgroundColor() {
+            return Color.parseColor("#000000");
         }
+
+        @Override
+        public void setBackgroundColor(@ColorInt int backgroundColor) {
+
+        }
+
+        private boolean isUrl(String url) {
+            return url.startsWith("http://") || (url.startsWith("https://"));
+        }
+
+
     }
 }
