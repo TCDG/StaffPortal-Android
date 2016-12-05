@@ -20,7 +20,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -31,9 +33,14 @@ import javax.net.ssl.HttpsURLConnection;
 public class ApiHandler {
 
     private static final String TEMP_BASE_URL = "https://portal.scammersublounge.com";
+    private static List<PunishmentObject> punishments = new ArrayList<>();
 
     public static void setupLists(Context context) {
         new UpdateReadData(context).execute();
+    }
+
+    public static List<PunishmentObject> getPunishments() {
+        return punishments;
     }
 
     public static class UpdateReadData extends AsyncTask<Void, Void, Void> {
@@ -134,7 +141,29 @@ public class ApiHandler {
         }
 
         private void handleData(JSONArray jsonObject) {
-            System.out.println(jsonObject.toString());
+
+            if (jsonObject != null) {
+                try {
+                    for (int x = 0; x < jsonObject.length(); x++) {
+                        JSONObject jsonItem = jsonObject.getJSONObject(x);
+
+                        int ID = jsonItem.getInt("ID");
+                        String date = jsonItem.getString("date");
+                        String offender = jsonItem.getString("offender");
+                        String admin = jsonItem.getString("admin");
+                        String reason = jsonItem.getString("reason");
+                        String info = jsonItem.getString("info");
+                        String proof = jsonItem.getString("proof");
+                        String expire = jsonItem.getString("expire");
+
+                        PunishmentObject punishmentObject = new PunishmentObject(ID, date, offender, admin, reason, info, proof, expire);
+                        punishments.add(punishmentObject);
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

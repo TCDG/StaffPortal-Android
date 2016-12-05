@@ -10,6 +10,7 @@ import android.util.Log;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.xelitexirish.staffportal_android.R;
 import com.xelitexirish.staffportal_android.ui.FragmentHome;
+import com.xelitexirish.staffportal_android.ui.FragmentPunishment;
 
 /**
  * Created by XeliteXirish on 29/11/2016 (www.xelitexirish.com)
@@ -31,7 +32,8 @@ public class NavigationHandler {
             switchScreen(context, homeFragment);
 
         } else if (id == idPunishmentsList) {
-
+            FragmentPunishment fragmentPunishment = new FragmentPunishment();
+            switchScreen(context, fragmentPunishment);
 
         } else if (id == idSettings) {
 
