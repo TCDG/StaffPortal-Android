@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         mIntroManager = new IntroManager(this);
         if (mIntroManager.isFirstTimeLaunch()) {
-            mIntroManager.setFirstTimeLaunch(true);
+            mIntroManager.setFirstTimeLaunch(false);
             startActivity(new Intent(MainActivity.this, IntroActivity.class));
             //finish();
         }
