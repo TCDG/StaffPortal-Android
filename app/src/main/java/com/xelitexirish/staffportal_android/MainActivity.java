@@ -1,8 +1,7 @@
 package com.xelitexirish.staffportal_android;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -16,7 +15,6 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.xelitexirish.staffportal_android.api.ApiHandler;
 import com.xelitexirish.staffportal_android.ui.FragmentHome;
-import com.xelitexirish.staffportal_android.ui.IntroActivity;
 import com.xelitexirish.staffportal_android.utils.IntroManager;
 import com.xelitexirish.staffportal_android.utils.NavigationHandler;
 
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         buildNavDrawer(savedInstanceState);
 
         ApiHandler.setupLists(this);
-        startActivity(new Intent(MainActivity.this, IntroActivity.class));
         mIntroManager = new IntroManager(this);
         if (mIntroManager.isFirstTimeLaunch()) {
             //startActivity(new Intent(MainActivity.this, IntroActivity.class));
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         // Set default home page
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null) {
-                    return;
+                return;
             }
 
             FragmentHome homeFragment = new FragmentHome();
@@ -106,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (mNavDrawer != null && mNavDrawer.isDrawerOpen()) {
             mNavDrawer.closeDrawer();
-        }else {
+        } else {
             super.onBackPressed();
         }
     }

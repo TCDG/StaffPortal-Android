@@ -11,7 +11,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by XeliteXirish on 29/11/2016 (www.xelitexirish.com)
@@ -19,9 +30,9 @@ import java.util.HashMap;
 
 public class ApiHandler {
 
-    private static final String TEMP_BASE_URL = "http://portal.scammersublounge.com";
+    private static final String TEMP_BASE_URL = "https://portal.scammersublounge.com";
 
-    public static void setupLists(Context context){
+    public static void setupLists(Context context) {
         new UpdateReadData(context).execute();
     }
 
@@ -30,7 +41,7 @@ public class ApiHandler {
         private Context mContext;
         private ProgressDialog mProgressDialog;
 
-        public UpdateReadData(Context context){
+        public UpdateReadData(Context context) {
             this.mContext = context;
         }
 
@@ -46,23 +57,84 @@ public class ApiHandler {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            String readUrl = TEMP_BASE_URL + Constants.READ_ENDPOINT;
+            String readUrl = TEMP_BASE_URL + Constants.READ_ENDPOINT + "?token=FE32An3I@-naq3_*eJ";
 
             try {
-                JSONParser jsonParser = new JSONParser();
-                JSONArray jsonArray = jsonParser.makeHttpRequest(mContext, readUrl, "GET", new HashMap<String, String>());
+                URL url = new URL(readUrl);
 
-                if (jsonArray != null) {
-                    for (int x = 0; x < jsonArray.length(); x++) {
-                        JSONObject jsonItem = jsonArray.getJSONObject(x);
-                        System.out.println(jsonItem.getString("offender"));
+                if (readUrl.startsWith("http://")) {
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setDoOutput(false);
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setRequestProperty("Accept-Charset", "UTF-8");
+                    httpURLConnection.setConnectTimeout(15000);
 
+                    httpURLConnection.connect();
+
+                    if (httpURLConnection.getResponseCode() == 301) {
+
+                        InputStream in = new BufferedInputStream(httpURLConnection.getInputStream());
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                        StringBuilder result = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            result.append(line);
+                        }
+
+                        httpURLConnection.disconnect();
+
+                        try {
+                            JSONArray jsonArray = new JSONArray(result.toString());
+                            handleData(jsonArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        System.out.println(httpURLConnection.getInputStream().toString() + " : " + httpURLConnection.getResponseCode());
+                    }
+
+
+                } else if (readUrl.startsWith("https://")) {
+
+                    HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
+                    httpsURLConnection.setDoOutput(false);
+                    httpsURLConnection.setRequestMethod("GET");
+                    httpsURLConnection.setRequestProperty("Accept-Charset", "UTF-8");
+                    httpsURLConnection.setConnectTimeout(15000);
+
+                    httpsURLConnection.connect();
+
+                    if (httpsURLConnection.getResponseCode() == 200) {
+                        InputStream in = new BufferedInputStream(httpsURLConnection.getInputStream());
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                        StringBuilder result = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            result.append(line);
+                        }
+
+                        httpsURLConnection.disconnect();
+
+                        try {
+                            JSONArray jsonArray = new JSONArray(result.toString());
+                            handleData(jsonArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+
+                        System.out.println(httpsURLConnection.getResponseCode());
                     }
                 }
-            } catch (JSONException e) {
+
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        private void handleData(JSONArray jsonObject) {
+            System.out.println(jsonObject.toString());
         }
     }
 }
