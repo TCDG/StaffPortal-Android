@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.xelitexirish.staffportal_android.ui.FragmentPunishment;
 import com.xelitexirish.staffportal_android.utils.Constants;
 import com.xelitexirish.staffportal_android.utils.JSONParser;
 
@@ -170,7 +171,9 @@ public class ApiHandler {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-
+            if (FragmentPunishment.swipeRefreshLayout != null) {
+                FragmentPunishment.updateRyclerView(mContext, getPunishments());
+            }
         }
     }
 }

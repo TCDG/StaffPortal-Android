@@ -44,6 +44,13 @@ public class FragmentPunishment extends Fragment{
 
         this.swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ApiHandler.setupLists(getContext());
+            }
+        });
+
         setupArrayAdapter(view);
     }
 
