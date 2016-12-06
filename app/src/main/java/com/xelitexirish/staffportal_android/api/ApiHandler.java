@@ -44,7 +44,7 @@ public class ApiHandler {
         return punishments;
     }
 
-    public static class UpdateReadData extends AsyncTask<Void, Void, Void> {
+    public static class UpdateReadData extends AsyncTask<Void, Void, List<PunishmentObject>> {
 
         private Context mContext;
         private ProgressDialog mProgressDialog;
@@ -64,7 +64,7 @@ public class ApiHandler {
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected List<PunishmentObject> doInBackground(Void... voids) {
             String readUrl = TEMP_BASE_URL + Constants.READ_ENDPOINT + "?token=FE32An3I@-naq3_*eJ";
 
             try {
@@ -93,7 +93,7 @@ public class ApiHandler {
 
                         try {
                             JSONArray jsonArray = new JSONArray(result.toString());
-                            handleData(jsonArray);
+                            return handleData(jsonArray);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -125,7 +125,7 @@ public class ApiHandler {
 
                         try {
                             JSONArray jsonArray = new JSONArray(result.toString());
-                            handleData(jsonArray);
+                            return handleData(jsonArray);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -141,10 +141,11 @@ public class ApiHandler {
             return null;
         }
 
-        private void handleData(JSONArray jsonObject) {
+        private List<PunishmentObject> handleData(JSONArray jsonObject) {
 
             if (jsonObject != null) {
                 try {
+                    ArrayList<PunishmentObject> punishmentObjects = new ArrayList<>();
                     for (int x = 0; x < jsonObject.length(); x++) {
                         JSONObject jsonItem = jsonObject.getJSONObject(x);
 
@@ -153,26 +154,33 @@ public class ApiHandler {
                         String offender = jsonItem.getString("offender");
                         String admin = jsonItem.getString("admin");
                         String reason = jsonItem.getString("reason");
+                        String action = jsonItem.getString("action");
                         String info = jsonItem.getString("info");
                         String proof = jsonItem.getString("proof");
                         String expire = jsonItem.getString("expire");
 
-                        PunishmentObject punishmentObject = new PunishmentObject(ID, date, offender, admin, reason, info, proof, expire);
-                        punishments.add(punishmentObject);
+                        PunishmentObject punishmentObject = new PunishmentObject(ID, date, offender, admin, reason, action, info, proof, expire);
+                        punishmentObjects.add(punishmentObject);
 
                     }
+                    return punishmentObjects;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(List<PunishmentObject> punishmentObjects) {
+            super.onPostExecute(punishmentObjects);
 
-            if (FragmentPunishment.swipeRefreshLayout != null) {
-                FragmentPunishment.updateRyclerView(mContext, getPunishments());
+            if (punishmentObjects != null) {
+                if (FragmentPunishment.swipeRefreshLayout != null) {
+                    FragmentPunishment.updateRyclerView(mContext, punishmentObjects);
+                }
+            }else {
+                System.out.println("No punishments found");
             }
         }
     }

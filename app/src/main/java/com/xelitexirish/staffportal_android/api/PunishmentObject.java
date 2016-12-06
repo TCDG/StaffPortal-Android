@@ -11,16 +11,18 @@ public class PunishmentObject {
     private String offender;
     private String admin;
     private String reason;
+    private String action;
     private String info;
     private String proof;
     private String expire;
 
-    public PunishmentObject(int id, String date, String offender, String admin, String reason, String info, String proof, String expire){
+    public PunishmentObject(int id, String date, String offender, String admin, String reason, String action, String info, String proof, String expire){
         this.ID = id;
         this.date = date;
         this.offender = offender;
         this.admin = admin;
         this.reason = reason;
+        this.action = action;
         this.info = info;
         this.proof = proof;
         this.expire = expire;
@@ -44,6 +46,10 @@ public class PunishmentObject {
 
     public String getReason(){
         return this.reason;
+    }
+
+    public String getAction(){
+        return this.action;
     }
 
     public String getInfo(){
