@@ -176,6 +176,9 @@ public class ApiHandler {
             super.onPostExecute(punishmentObjects);
 
             if (punishmentObjects != null) {
+                punishments.clear();
+                punishments.addAll(punishmentObjects);
+
                 if (FragmentPunishment.swipeRefreshLayout != null) {
                     FragmentPunishment.updateRyclerView(mContext, punishmentObjects);
                 }
