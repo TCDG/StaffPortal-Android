@@ -9,6 +9,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -40,6 +43,7 @@ public class FragmentPunishment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         adapterPunishments = new ListViewAdapter(getContext(), punishmentObjects);
@@ -52,6 +56,23 @@ public class FragmentPunishment extends Fragment {
         });
 
         setupArrayAdapter(view);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_search, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.action_search) {
+            // Do something
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupArrayAdapter(View view) {
